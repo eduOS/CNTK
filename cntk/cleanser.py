@@ -14,7 +14,7 @@ import html2text
 
 __all__ = ['Cleanser']
 
-translate_talbe = dict((ord(char), None) for char in Punctuation.ALL_PUNC)
+translate_table = dict((ord(char), None) for char in Punctuation.ALL_PUNC)
 
 
 class Cleanser(BaseProcessor):
@@ -79,7 +79,7 @@ class Cleanser(BaseProcessor):
     @not_none
     def del_all_punc(self):
         # https://stackoverflow.com/a/1324114/3552975
-        self._sentence = self._sentence.translate(translate_talbe)
+        self._sentence = self._sentence.translate(translate_table)
         return self
 
     @safely_del(offals.PARENOTE)
