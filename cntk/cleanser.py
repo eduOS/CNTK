@@ -18,6 +18,7 @@ translate_table = dict((ord(char), None) for char in Punctuation.ALL_PUNC)
 
 
 class Cleanser(BaseProcessor):
+    # TODO: a classmethod to initialize this class
     def __init__(self, sentence=0):
         super(Cleanser, self).__init__(sentence)
         self.h = None
