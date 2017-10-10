@@ -14,7 +14,11 @@ import html2text
 
 __all__ = ['Cleanser']
 
+<<<<<<< HEAD
 translate_table = dict((ord(char), ' ') for char in Punctuation.ALL_PUNC)
+=======
+translate_table = dict((ord(char), " ") for char in Punctuation.ALL_PUNC)
+>>>>>>> 49606dd56d3ea7220402a87c53680f4157c44ff2
 
 
 class Cleanser(BaseProcessor):
