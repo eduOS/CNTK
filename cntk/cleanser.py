@@ -14,10 +14,11 @@ import html2text
 
 __all__ = ['Cleanser']
 
-translate_table = dict((ord(char), None) for char in Punctuation.ALL_PUNC)
+translate_table = dict((ord(char), ' ') for char in Punctuation.ALL_PUNC)
 
 
 class Cleanser(BaseProcessor):
+    # TODO: a classmethod to initialize this class
     def __init__(self, sentence=0):
         super(Cleanser, self).__init__(sentence)
         self.h = None
@@ -94,24 +95,24 @@ class Cleanser(BaseProcessor):
     def del_links(self, *args):
         return
 
-    @not_none
-    def strip_punc(self):
-        """
-        offals should be first deleted
-        all chinese punc should be transfered to english ones
-        """
-        self._sentence = self._sentence.strip(Punctuation.ALL.replace('"', ''))
-        # the self._sentence should not start with punctuations and ends with
-        # non stop punc
-        # nonstart = "".join(
-        #     list(set(constants.punc) - set(constants.sentencestart)))
-        # nonstopend = "".join(
-        #     list(set(constants.punc) - set(constants.nonstopend)))
-        # delete all non_sentence end and stops(for delete all duplicates)
-        # self._sentence = self._sentence.lstrip(nonstart).rstrip(nonstopend)
-        self._sentence = re.sub(Punctuation.USELESS, "", self._sentence)
-        # print('after sub: '+self._sentence)
-        return self
+    # @not_none
+    # def strip_punc(self):
+    #     """
+    #     offals should be first deleted
+    #     all chinese punc should be transfered to english ones
+    #     """
+    #     self._sentence = self._sentence.strip(Punctuation.ALL.replace('"', ''))
+    #     # the self._sentence should not start with punctuations and ends with
+    #     # non stop punc
+    #     # nonstart = "".join(
+    #     #     list(set(constants.punc) - set(constants.sentencestart)))
+    #     # nonstopend = "".join(
+    #     #     list(set(constants.punc) - set(constants.nonstopend)))
+    #     # delete all non_sentence end and stops(for delete all duplicates)
+    #     # self._sentence = self._sentence.lstrip(nonstart).rstrip(nonstopend)
+    #     self._sentence = re.sub(Punctuation.USELESS, "", self._sentence)
+    #     # print('after sub: '+self._sentence)
+    #     return self
 
     def simply_clean(self):
         """

@@ -152,7 +152,7 @@ class Standardizer(BaseProcessor):
     @not_none
     def cut_or_add_punc(self):
         """
-        has not been implemented
+        delete " with sentence dilimiters in it
         """
         new_sentence = ""
         if not re.search('"', self._sentence):
@@ -181,8 +181,9 @@ class Standardizer(BaseProcessor):
             """
             the default sub order
             """
-            self.math_int().unit_date().math_frac().unit_per(
+            self.to_lowercase().zh_punc2en_punc().fwidth2hwidth(
+            ).math_int().unit_date().math_frac().unit_per(
             ).unit_percent().unit_range().unit_en2zh0().unit_en2zh1(
             ).unit_en2zh2().unit_temp().unit_latnlon().unit_time(
-            ).zero_one().time_zero().math_percent()
+            ).zero_one().time_zero().math_percent().cut_or_add_punc()
         return self
