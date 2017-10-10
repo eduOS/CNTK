@@ -119,8 +119,7 @@ class Cleanser(BaseProcessor):
         clean public articles such as news and the alike published by
         offical agents
         """
-        return self.del_links(
-        ).del_parenote().del_bullet().del_addition()._sentence
+        return self.del_links().del_parenote().del_bullet().del_addition().sentence
 
     def clean(self):
-        return self.delete_offals().strip_punc()
+        return self.delete_offals().del_all_punc()
