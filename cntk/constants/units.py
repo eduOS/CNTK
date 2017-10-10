@@ -268,10 +268,14 @@ class Unit2ZH(object):
             minu = match.group('minu')
             sec = match.group('sec')
 
-            if sec:
+            if deg and minu and sec:
                 rt = deg+"度"+minu+"分"+sec+"秒"
-            elif minu:
+            elif deg and minu:
                 rt = deg+"度"+minu+"分"
+            elif deg and sec:
+                rt = deg+"度"+sec+"秒"
+            elif minu and sec:
+                rt = minu+"分"+sec+"秒"
             elif deg:
                 rt = deg+"度"
             return pref+rt
