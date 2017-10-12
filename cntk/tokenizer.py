@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals, print_function
-import constants
+from . import constants
 import jieba
 import jieba.posseg as posseg
 import re
@@ -161,17 +161,23 @@ def text2charlist(text, utf8=False):
         coding will remain the same, if utf8 is true return utf-8
     """
     flag = False
+    try:
+        _w1 = re.compile("(\w+)", re.A)
+        _w2 = re.compile("^\w+$", re.A)
+    except:
+        _w1 = re.compile("(\w+)")
+        _w2 = re.compile("^\w+$")
     if type(text) == list:
-        text = [itm.decode('utf-8') if type(itm) == str else itm for itm in text]
+        text = [itm if type(itm) == str else itm for itm in text]
         flag = True
         text = ''.join(text)
     elif type(text) == str:
-        text = text.decode('utf-8')
+        text = text
         flag = True
-    text = re.sub("(\w+)", r' \1 ', text)
-    lst = [[itm] if re.match('^\w+$', itm) else list(itm) for itm in cleanser.set_sentence(text).delete_whitespace().sentence.split()]
+    text = re.sub(_w1, r' \1 ', text)
+    lst = [[itm] if re.match(_w2, itm) else list(itm) for itm in cleanser.set_sentence(text).delete_whitespace().sentence.split()]
     text = ' '.join([' '.join(itm) for itm in lst])
     lst = [char for char in text.split() if char.strip() != ""]
     if flag and not utf8:
-        lst = [char.encode('utf-8') for char in lst]
+        lst = [char for char in lst]
     return lst

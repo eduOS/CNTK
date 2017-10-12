@@ -5,13 +5,7 @@ reference url = https://github.com/tsroten/zhon
 
 from __future__ import unicode_literals
 
-import leetspeak
-import coarse_language
-import punctuation
-import cjk
-import stopwords
-import offals
-import keywords
+from . import leetspeak, coarse_language, punctuation, cjk, stopwords, offals, keywords
 
 __all__ = ['simp', 'trad', 'tradsimp', 'leet', 'coarse', 'cjk', 'punc',
            'stops', 'nonstops', 'sentencestart', 'sentenceend', 'nonstopend',
