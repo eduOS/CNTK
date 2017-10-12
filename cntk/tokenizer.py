@@ -7,6 +7,7 @@ import jieba
 import jieba.posseg as posseg
 import re
 from cntk.cleanser import Cleanser
+from cntk.utils import regex_compile
 
 __all__ = ['JiebaTokenizer']
 
@@ -161,12 +162,6 @@ def text2charlist(text, utf8=False):
         coding will remain the same, if utf8 is true return utf-8
     """
     flag = False
-    try:
-        _w1 = re.compile("(\w+)", re.A)
-        _w2 = re.compile("^\w+$", re.A)
-    except:
-        _w1 = re.compile("(\w+)")
-        _w2 = re.compile("^\w+$")
     if type(text) == list:
         text = [itm if type(itm) == str else itm for itm in text]
         flag = True
@@ -174,8 +169,8 @@ def text2charlist(text, utf8=False):
     elif type(text) == str:
         text = text
         flag = True
-    text = re.sub(_w1, r' \1 ', text)
-    lst = [[itm] if re.match(_w2, itm) else list(itm) for itm in cleanser.set_sentence(text).delete_whitespace().sentence.split()]
+    text = re.sub(regex_compile("(\w+)"), r' \1 ', text)
+    lst = [[itm] if re.match(regex_compile("^\w+$"), itm) else list(itm) for itm in cleanser.set_sentence(text).delete_whitespace().sentence.split()]
     text = ' '.join([' '.join(itm) for itm in lst])
     lst = [char for char in text.split() if char.strip() != ""]
     if flag and not utf8:

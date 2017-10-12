@@ -7,8 +7,17 @@ from __future__ import division
 
 import re
 from codecs import open
-from functools import wraps
+from functools import reduce, wraps
 
+
+def regex_compile(regex, flags=[]):
+    try:
+        a = re.A
+        r = re.compile(regex, reduce(lambda i,j: i|j, flags+[re.A], 0))
+    except:
+        a = 0
+        r = re.compile(regex, reduce(lambda i,j: i|j, flags, 0))
+    return r
 
 def not_none(func):
     """

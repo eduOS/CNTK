@@ -10,6 +10,7 @@ from cntk.constants import offals
 from cntk.utils import not_none, BaseProcessor
 from cntk.constants.punctuation import Punctuation
 from cntk.utils import safely_del
+from cntk.utils import regex_compile
 import html2text
 
 __all__ = ['Cleanser']
@@ -41,7 +42,7 @@ class Cleanser(BaseProcessor):
     @not_none
     def delete_whitespace(self):
         self._sentence = self._sentence.strip()
-        self._sentence = re.sub('(?<!\w)\s(?!\w)', '', self._sentence)
+        self._sentence = re.sub(regex_compile('(?<!\w)\s(?!\w)'), '', self._sentence)
         # print(self._sentence)
         return self
 

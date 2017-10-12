@@ -5,6 +5,7 @@ from __future__ import unicode_literals, print_function
 from __future__ import absolute_import
 from __future__ import division
 import re
+from cntk.utils import regex_compile
 
 
 class Unit2ZH(object):
@@ -123,7 +124,7 @@ class Unit2ZH(object):
         def range_sub(match):
             return r"{from}到{to}".format(**match.groupdict())
         RANGE = {
-            "pattern": (
+            "pattern": regex_compile(
                 "(?P<from>\d"
                 "[°a-zA-Z\u4e00-\u9fff]{0,7}(?:[23])?"
                 "(?:\/[a-zA-Z\u4e00-\u9fff]+[23]?)?)"
@@ -140,7 +141,7 @@ class Unit2ZH(object):
         """
         extract units
         """
-        EXTRACTOR = (
+        EXTRACTOR = regex_compile(
             "(?<=([\u4e00-\u9fff]|^))"
             "(?:\d(\.\d)?\d*)"
             # match the numbers ahead of the units
@@ -171,7 +172,7 @@ class Unit2ZH(object):
 
         PERCENT = {
             # some problems here
-            "pattern": (
+            "pattern": regex_compile(
                 # "(?P<range>(?P<from>[\d\.]+)((?P<thou>‰)|(?P<hun>\%))?"
                 # "[?\-～ ~〜~—])?(?P<to>[\d\.]+)"
                 # "(?:(?(thou)(?P<thou1>‰)|(?(hun)(?P<hun1>\%)|(?!))))"
@@ -202,7 +203,7 @@ class Unit2ZH(object):
             return amp+"{hour}点{minu}分".format(**match.groupdict())
 
         TIME = {
-            'pattern': (
+            'pattern': regex_compile(
                 "(?P<fbd>[成是为按比以])?"
                 "((?P<hour>[01]\d|2[0-3]):(?P<minu>[0-5]\d)|24:00)"
                 "(?P<apm>[ap]\.?m\.?)?"
@@ -220,7 +221,7 @@ class Unit2ZH(object):
                 return r"{year}年{month}月".format(**match.groupdict())
 
         DATE = {
-            "pattern": (
+            "pattern": regex_compile(
                 "(?P<year>(1[7-9]|20)\d{2})[-./]"
                 "(?P<month>((?P<mf>0)|[12])?(?(mf)[1-9]|\d*))"
                 "(?:[-./])?(?P<day>((?P<df>0)|[1-3])?(?(df)[0-9]|\d*))?"
@@ -236,7 +237,7 @@ class Unit2ZH(object):
             return r"{num}每{deno}".format(**match.groupdict())
 
         PER = {
-            "pattern": (
+            "pattern": regex_compile(
                 "(?P<num>\d(\d|\.)*[\u4e00-\u9fff]{,3})"
                 "\/(?P<deno>[\u4e00-\u9fff]{1,3})"),  # the full width ／
             "repl": per_sub,
@@ -281,7 +282,7 @@ class Unit2ZH(object):
             return pref+rt
 
         ANGLE = {
-            "pattern": (
+            "pattern": regex_compile(
                 "(?P<pon>[-+])?(?P<deg>[\d\.]+)°"
                 """((?P<minu>\d+)[′'])?((?P<sec>\d+)(′′|"))?(?![C])"""
                 # the full width is ′＇ and ″＂
@@ -312,13 +313,12 @@ class Unit2ZH(object):
             return pon + type + num + unit
 
         TEMP = {
-            "pattern": (
+            "pattern": regex_compile(
                 "(?P<pon>[-+])?(?P<num>([\.\d]+))?°(?P<unit>[cfk])"
                 # "(?![^\w])"
-            ),
+            , [re.IGNORECASE]),
             # ℃   is the full width character of °C
             "repl": temp_sub,
-            "flags": re.IGNORECASE
         }
 
         return TEMP
@@ -339,10 +339,9 @@ class Unit2ZH(object):
             return nrep
 
         UNIT = {
-            "pattern": ("(?<=[\u4e00-\u9fff])"
-                        "(?P<unit>[a-zA-Z]+)(?=[\u4e00-\u9fff\.])"),
+            "pattern": regex_compile("(?<=[\u4e00-\u9fff])"
+                        "(?P<unit>[a-zA-Z]+)(?=[\u4e00-\u9fff\.])", [re.IGNORECASE]),
             "repl": sub,
-            "flags": re.IGNORECASE
         }
 
         return UNIT
@@ -399,12 +398,11 @@ class Unit2ZH(object):
                 return n23 + nrep
 
         UNIT = {
-            "pattern": (
+            "pattern": regex_compile(
                 "(?<=\d)(?P<num>[a-zA-Z]+)(?P<n23>[23])?"
                 "(?P<derived>/(?P<dem>[a-zA-Z]+)(?P<d23>[23])?)?"
-            ),
+            , [re.IGNORECASE]),
             "repl": en_sub,
-            "flags": re.IGNORECASE
         }
 
         return UNIT
@@ -426,15 +424,14 @@ class Unit2ZH(object):
                 return "乘以"
 
         EN2ZH = {
-            "pattern": (
+            "pattern": regex_compile(
                 "(?<=\d)"
                 "((?P<ton>t(?!\w))|"
                 "((?P<o20>[Oo]+)(?=[\u4e00-\u9fff]))|"
                 "((?P<vt>V)(?!\w))|"
                 "((?P<mul>X)(?=\d)))"
-            ),
+            , [re.IGNORECASE]),
             "repl": en2zh_sub,
-            "flags": re.IGNORECASE
         }
 
         return EN2ZH
@@ -495,12 +492,11 @@ class Unit2ZH(object):
                 return n23 + nrep
 
         DERIVED = {
-            "pattern": (
+            "pattern": regex_compile(
                 "(?<=\d)(?P<num>[a-zA-Z]+)(?P<n23>[23])?"
                 "(?P<derived>/(?P<dem>[a-zA-Z]+)(?P<d23>[23])?)?"
-            ),
+            , [re.IGNORECASE]),
             "repl": en_sub,
-            "flags": re.IGNORECASE
         }
 
         return DERIVED
