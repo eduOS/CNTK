@@ -81,7 +81,9 @@ class Cleanser(BaseProcessor):
     @not_none
     def del_all_punc(self):
         # https://stackoverflow.com/a/1324114/3552975
+        self._sentence = re.sub("\.(?=\d)", "dooooooog", self._sentence)
         self._sentence = self._sentence.translate(translate_table)
+        self._sentence = re.sub("dooooooog(?=\d)", ".", self._sentence)
         return self
 
     @safely_del(offals.PARENOTE)

@@ -169,8 +169,8 @@ def text2charlist(text, utf8=False):
     elif type(text) == str:
         text = text
         flag = True
-    text = re.sub(regex_compile("(\w+)"), r' \1 ', text)
-    lst = [[itm] if re.match(regex_compile("^\w+$"), itm) else list(itm) for itm in cleanser.set_sentence(text).delete_whitespace().sentence.split()]
+    text = re.sub(regex_compile("((\w|\.)+)"), r' \1 ', text)
+    lst = [[itm] if re.match(regex_compile("^(\w|\.)+$"), itm) else list(itm) for itm in cleanser.set_sentence(text).delete_whitespace().sentence.split()]
     text = ' '.join([' '.join(itm) for itm in lst])
     lst = [char for char in text.split() if char.strip() != ""]
     if flag and not utf8:
