@@ -81,9 +81,9 @@ class Cleanser(BaseProcessor):
     @not_none
     def del_all_punc(self):
         # https://stackoverflow.com/a/1324114/3552975
-        self._sentence.sub(regex_compile("(?<=\d)\.(?=\d)"), 'ddoott')
+        self._sentence = self._sentence.sub(regex_compile("(?<=\d)\.(?=\d)"), 'doooooog')
         self._sentence = self._sentence.translate(translate_table)
-        self._sentence.replace('ddoott', '.')
+        self._sentence = self._sentence.sub(regex_compile("(?<=\d)doooooog(?=\d)"), 'doooooog')
         return self
 
         return self
