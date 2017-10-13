@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals, print_function
+from . import constants
 import jieba
 import jieba.posseg as posseg
-import sys
-from . import constants
 import re
 from cntk.cleanser import Cleanser
 from cntk.utils import regex_compile
@@ -162,27 +161,6 @@ def text2charlist(text, utf8=False):
         text can be both str or unicode, list or string
         coding will remain the same, if utf8 is true return utf-8
     """
-<<<<<<< HEAD
-    if sys.version_info >= (3, 0):
-        _w = re.compile("(\w+)", re.A)
-    else:
-        _w = re.compile("(\w+)")
-
-    flag = False
-    if type(text) == list:
-        text = [itm.decode('utf-8') if type(itm) == str else itm for itm in text]
-        flag = True
-        text = ''.join(text)
-    elif type(text) == str:
-        text = text.decode('utf-8')
-        flag = True
-    text = re.sub(_w, r' \1 ', text)
-    lst = [[itm] if re.match('^\w+$', itm) else list(itm) for itm in cleanser.set_sentence(text).delete_whitespace().sentence.split()]
-    text = ' '.join([' '.join(itm) for itm in lst])
-    lst = [char for char in text.split() if char.strip() != ""]
-    if flag and not utf8:
-        lst = [char.encode('utf-8') for char in lst]
-=======
     flag = False
     if type(text) == list:
         text = [itm if type(itm) == str else itm for itm in text]
@@ -197,5 +175,4 @@ def text2charlist(text, utf8=False):
     lst = [char for char in text.split() if char.strip() != ""]
     if flag and not utf8:
         lst = [char for char in lst]
->>>>>>> hubos/master
     return lst

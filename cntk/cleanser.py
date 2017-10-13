@@ -86,6 +86,8 @@ class Cleanser(BaseProcessor):
         self._sentence.replace('ddoott', '.')
         return self
 
+        return self
+
     @safely_del(offals.PARENOTE)
     def del_parenote(self, *args):
         return

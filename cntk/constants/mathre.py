@@ -5,6 +5,7 @@ from __future__ import unicode_literals, print_function
 from __future__ import absolute_import
 from __future__ import division
 
+from cntk.utils import regex_compile
 
 class Math2ZH(object):
 
@@ -18,7 +19,10 @@ class Math2ZH(object):
                 return r"{den2}分之{num2}".format(**match.groupdict())
 
         FRAC = {
-            "pattern": (
+            "pattern": regex_compile(
+                "(?P<from>(?P<num1>\d+)/(?P<den1>\d+)[-~〜—一?])"
+                "(?P<to>(?P<num2>\d+)/(?P<den2>\d+))"),
+            "repl": sub_frac,
                 "(?P<from>(?P<num1>\d+)/(?P<den1>\d+)[-~〜—一?])"
                 "(?P<to>(?P<num2>\d+)/(?P<den2>\d+))"),
             "repl": sub_frac,
@@ -29,7 +33,7 @@ class Math2ZH(object):
     @staticmethod
     def myint():
         INT = {
-            "pattern": "(\d+)\.0+[^\dloO]?",
+            "pattern": regex_compile("(\d+)\.0+[^\dloO]?"),
             "repl": r"\1",
         }
 
@@ -52,7 +56,7 @@ class Math2ZH(object):
             return repl
 
         ZOO = {
-            "pattern": (
+            "pattern": regex_compile(
                 "(?<![0-9a-zA-Z])"
                 "(?P<lo>[l]+(?P<lnum>\d)|(?P<onum>[1-9])[oO]+)"
             ),
@@ -64,7 +68,7 @@ class Math2ZH(object):
     @staticmethod
     def score():
         SCORE = {
-            "pattern": "(?<!\w)\d:\d(?!\w)",
+            "pattern": regex_compile("(?<!\w)\d:\d(?!\w)"),
             "repl": r"\1比\2"
         }
 
@@ -73,7 +77,7 @@ class Math2ZH(object):
     @staticmethod
     def percent():
         PERCENT = {
-            "pattern": "(?<!\w)(\d+)\/(\d+)(?![\w\/])",
+            "pattern": regex_compile("(?<!\w)(\d+)\/(\d+)(?![\w\/])"),
             "repl": r"\2分之\1"
         }
 
