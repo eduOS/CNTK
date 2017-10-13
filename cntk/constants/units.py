@@ -494,8 +494,8 @@ class Unit2ZH(object):
         DERIVED = {
             "pattern": regex_compile(
                 "(?<=\d)(?P<num>[a-zA-Z]+)(?P<n23>[23])?"
-                "(?P<derived>/(?P<dem>[a-zA-Z]+)(?P<d23>[23])?)?"
-            , [re.IGNORECASE]),
+                "(?P<derived>/(?P<dem>[a-zA-Z]+)(?P<d23>[23])?)?",
+                [re.IGNORECASE]),
             "repl": en_sub,
         }
 

@@ -23,6 +23,9 @@ relaTime = regex_compile(
     "(?P<time>(" +
     relaDate +
     '|' +
+    "(?P<time>(" +
+    relaDate +
+    '|' +
     week +
     '|' +
     relatime +

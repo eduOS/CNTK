@@ -23,6 +23,9 @@ class Math2ZH(object):
                 "(?P<from>(?P<num1>\d+)/(?P<den1>\d+)[-~〜—一?])"
                 "(?P<to>(?P<num2>\d+)/(?P<den2>\d+))"),
             "repl": sub_frac,
+                "(?P<from>(?P<num1>\d+)/(?P<den1>\d+)[-~〜—一?])"
+                "(?P<to>(?P<num2>\d+)/(?P<den2>\d+))"),
+            "repl": sub_frac,
         }
 
         return FRAC

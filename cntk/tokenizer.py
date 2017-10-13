@@ -34,7 +34,7 @@ class Tokenizer(object):
     def text2para(self):
         pass
 
-    def text2sentences(self, txt, punc=False):
+    def text2sentences(self, txt, punc=True):
         """
         cut a text into sentences using regex
         if punc is True then the ending punctuation will be kept
