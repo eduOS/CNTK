@@ -6,8 +6,9 @@ from __future__ import absolute_import
 from __future__ import division
 
 from cntk.constants.punctuation import Punctuation
+from cntk.utils import regex_compile
 
-BULLET = (
+BULLET = regex_compile(
     "("
     "^\s*[第其]?[0-9０１２３４５６７８９一二三四五六七八九]+([/\])?"
     "([-、，,:：．　\)）]|(\.(?!\d))|个?就?是)"

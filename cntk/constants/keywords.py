@@ -6,6 +6,7 @@ from __future__ import absolute_import
 from __future__ import division
 from cntk.constants.punctuation import Punctuation
 from cntk.constants.coarse_language import CHARACTERS
+from cntk.utils import regex_compile
 
 PRODUCT_KWS = (
     "q[q号]+|腾讯|华夏|siri|新浪|"  # company
@@ -63,10 +64,10 @@ ANAPHORA = (
 COARSE_KWS = "|".join(CHARACTERS)
 
 # cannot appear in both
-NUMBER_KWS = "\d{5,}"
+NUMBER_KWS = regex_compile("\d{5,}")
 
 # cannot appear in question
-MULTICHOICE_KWS = (
+MULTICHOICE_KWS = regex_compile(
     # only about multiple choice questions
     # "打[一二]|猜.?字|谜语|^猜|猜[个一二两四]|"地理\d{3}|"
     # "的问题$|" "[荐学]谜[：:]?|急转弯|"  |^有关
@@ -96,7 +97,7 @@ WEIBO_KWS = (
     "互粉|粉丝|新浪|微博|点赞|大[拿v神]|转发|关注"
 )
 
-NEWS_KWS = (
+NEWS_KWS = regex_compile(
     "虎嗅网|记者\s*：|编者|笔者|观察网|36氪|虎嗅|澎湃新?|雷锋网|[iI]黑马|创业邦"
 )
 

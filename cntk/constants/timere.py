@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals, print_function
+from cntk.utils import regex_compile
 
 # including all about characters about week
 week = '[下这]+(星期|周)[一二三四五六七天日末]?'
@@ -18,7 +19,7 @@ absoDate = (
     "\d{,2}[一二三四五六七八九十]{,4}[号日]"
 )
 
-relaTime = (
+relaTime = regex_compile(
     "(?P<time>(" +
     relaDate +
     '|' +
@@ -30,7 +31,7 @@ relaTime = (
     ')'
 )
 
-absoTime = '(?P<time>' + absoDate + time + ')'
+absoTime = regex_compile('(?P<time>' + absoDate + time + ')')
 
 EN_DATE = "(?P<year>\d{4})\.(?P<month>[01]?\d)\.(?P<day>[0123]\d)"
 TIME_RANGE = "(?<=\d{1,4}[年月日]?)([?\-~〜~—])+(?=\d{1,4}[年月日])"
