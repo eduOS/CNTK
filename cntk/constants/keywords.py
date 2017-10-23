@@ -62,9 +62,8 @@ ANAPHORA = (
 )
 
 COARSE_KWS = "|".join(CHARACTERS)
-# cannot appear in both
 
-# cannot appear in question
+# cannot appear in both
 NUMBER_KWS = regex_compile("\d{5,}")
 
 # cannot appear in question
