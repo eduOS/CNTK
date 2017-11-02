@@ -9,6 +9,7 @@ Please check the corresponding code file, and it will be well documented later
 2. standardize chinese text
 3. filter out what you don't need
 4. all kinds of tokenization functions: text to sentences, sentence to words or text to characters
+
 An example:  
 ```python
 >>> from cntk.tokenizer import text2charlist as tc
@@ -16,4 +17,4 @@ An example:
 ["与", "awd", "店", "名", "“ ", "叫", "了", "个", "鸡", "” ", "配", "套", "的", "还", "有", "不", "少", "宣", "传", "标", "语", "，", "213", "23", "包", "括", "叫", "3 ", "123", "个", "童", "子", "鸡", "、", "和", "她", "有", "一", "腿", "等", "。"]
 ```
 
-I have done the dirty work for you, then start your awesome job!
+I have done the dirty work, best wishes for your awesome job!
