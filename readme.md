@@ -1,7 +1,7 @@
 # installation
 1. clone this repo to your local machine
 2. `cd CNTK` to go to the root directory
-3. install by `pip install -e .`
+3. install by `pip install -e .` or `pip3 install -e .` 
 
 # documentation
 Please check the corresponding code file, and it will be well documented later   
