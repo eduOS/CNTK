@@ -160,19 +160,33 @@ def text2charlist(text, utf8=False):
     input:
         text can be both str or unicode, list or string
         coding will remain the same, if utf8 is true return utf-8
+    output:
+        a list of segmented characters
     """
     flag = False
     if type(text) == list:
-        text = [itm if type(itm) == str else itm for itm in text]
-        flag = True
-        text = ''.join(text)
+        try:
+            for itm in text:
+                if type(itm) == str:
+                    flag = True
+            text = [itm.decode("utf-8") if type(itm) == str else itm for itm in text]
+        except AttributeError:
+            pass
+        text = ' '.join(text)
     elif type(text) == str:
-        text = text
-        flag = True
+        try:
+            text = text.decode("utf-8")
+            flag = True
+        except AttributeError:
+            pass
+    # separate the characters by space
     text = re.sub(regex_compile("((\w|\.)+)"), r' \1 ', text)
     lst = [[itm] if re.match(regex_compile("^(\w|\.)+$"), itm) else list(itm) for itm in cleanser.set_sentence(text).delete_whitespace().sentence.split()]
     text = ' '.join([' '.join(itm) for itm in lst])
+    # delete the blank items
     lst = [char for char in text.split() if char.strip() != ""]
     if flag and not utf8:
-        lst = [char for char in lst]
+        # if the coding has been changed and the output is not set as utf-8
+        # then change the coding back
+        lst = [char.encode('utf-8') for char in lst]
     return lst
