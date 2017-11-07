@@ -69,3 +69,17 @@ CONJUNCTION = (
     # objective
     # "以|以便|以免|为了"
 )
+
+NONCHINCHAR = regex_compile("((\w|\.)+)")
+
+
+class Offals(object):
+
+    @staticmethod
+    def nonchinchar(repl="*"):
+        NCC = {
+            "pattern": NONCHINCHAR,
+            "repl": repl,
+        }
+
+        return NCC

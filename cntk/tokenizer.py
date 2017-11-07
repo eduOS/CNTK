@@ -8,6 +8,7 @@ import jieba.posseg as posseg
 import re
 from cntk.cleanser import Cleanser
 from cntk.utils import regex_compile
+from cntk.constants import offals
 
 __all__ = ['JiebaTokenizer']
 
@@ -180,8 +181,8 @@ def text2charlist(text, utf8=False):
         except AttributeError:
             pass
     # separate the characters by space
-    text = re.sub(regex_compile("((\w|\.)+)"), r' \1 ', text)
-    lst = [[itm] if re.match(regex_compile("^(\w|\.)+$"), itm) else list(itm) for itm in cleanser.set_sentence(text).delete_whitespace().sentence.split()]
+    text = re.sub((offals.NONCHINCHAR), r' \1 ', text)
+    lst = [[itm] if re.match(offals.NONCHINCHAR, itm) else list(itm) for itm in cleanser.set_sentence(text).delete_whitespace().sentence.split()]
     text = ' '.join([' '.join(itm) for itm in lst])
     # delete the blank items
     lst = [char for char in text.split() if char.strip() != ""]

@@ -13,6 +13,7 @@ from cntk.constants.mathre import Math2ZH
 from cntk.constants.units import Unit2ZH
 from cntk.constants.timere import Time2ZH
 from cntk.utils import not_none, safely_sub, further_sub, BaseProcessor
+from cntk.constants.offals import Offals
 
 __all__ = ['Standardizer', 'Converter']
 
@@ -148,6 +149,13 @@ class Standardizer(BaseProcessor):
     @safely_sub
     def zero_one(self):
         return Math2ZH.zeroorone()
+
+    @safely_sub
+    def non_chinchar(self, repl="*"):
+        """
+        replace non (repetitive) chinese characters with repl
+        """
+        return Offals.nonchinchar(repl)
 
     @not_none
     def cut_or_add_punc(self):
