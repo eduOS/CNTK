@@ -151,11 +151,11 @@ class Standardizer(BaseProcessor):
         return Math2ZH.zeroorone()
 
     @safely_sub
-    def non_chinchar(self, repl="*"):
+    def digits(self, repl="*"):
         """
         replace non (repetitive) chinese characters with repl
         """
-        return Offals.nonchinchar(repl)
+        return Offals.digits(repl)
 
     @not_none
     def cut_or_add_punc(self):

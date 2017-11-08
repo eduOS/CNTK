@@ -12,6 +12,6 @@ setup(
     author='Lerner Adams',
     author_email='lerner.adams@hotmail.com',
     # url='https://github.com/kedz/sumpy',
-    install_requires=["jieba", "opencc"],
+    install_requires=["jieba", "opencc", "html2text"],
     # include_package_data=True,
 )

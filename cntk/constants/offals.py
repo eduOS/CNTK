@@ -76,9 +76,9 @@ NONCHINCHAR = regex_compile("((\w|\.)+)")
 class Offals(object):
 
     @staticmethod
-    def nonchinchar(repl="*"):
+    def digits(repl="*"):
         NCC = {
-            "pattern": NONCHINCHAR,
+            "pattern": DIGITS,
             "repl": repl,
         }
 
