@@ -7,7 +7,6 @@ import jieba
 import jieba.posseg as posseg
 import re
 from cntk.cleanser import Cleanser
-from cntk.utils import regex_compile
 from cntk.constants import offals
 
 __all__ = ['JiebaTokenizer']
@@ -154,7 +153,7 @@ class THUNLPTokenizer(Tokenizer):
 cleanser = Cleanser()
 
 
-def text2charlist(text, utf8=False):
+def text2charlist(text, utf8=False, keep_word=""):
     """
     return chinese character based list
     all word characters \w remain the same, not separated
@@ -165,6 +164,8 @@ def text2charlist(text, utf8=False):
         a list of segmented characters
     """
     flag = False
+    if keep_word:
+        keep_word_escape = re.escape(keep_word)
     if type(text) == list:
         try:
             for itm in text:
@@ -180,9 +181,12 @@ def text2charlist(text, utf8=False):
             flag = True
         except AttributeError:
             pass
+    if keep_word:
+        text = re.sub(keep_word_escape, "PLACEMENT", text)
     # separate the characters by space
     text = re.sub((offals.NONCHINCHAR), r' \1 ', text)
-    lst = [[itm] if re.match(offals.NONCHINCHAR, itm) else list(itm) for itm in cleanser.set_sentence(text).delete_whitespace().sentence.split()]
+    lst = [[itm] if re.match(offals.NONCHINCHAR, itm) else list(itm)
+           for itm in cleanser.set_sentence(text).delete_whitespace().sentence.split()]
     text = ' '.join([' '.join(itm) for itm in lst])
     # delete the blank items
     lst = [char for char in text.split() if char.strip() != ""]
@@ -190,4 +194,6 @@ def text2charlist(text, utf8=False):
         # if the coding has been changed and the output is not set as utf-8
         # then change the coding back
         lst = [char.encode('utf-8') for char in lst]
+    if keep_word:
+        lst = [re.sub("PLACEMENT", keep_word, c) for c in lst]
     return lst
