@@ -65,6 +65,7 @@ class Unit2ZH(object):
     ambipairs = {
         # ambiguous pairs
         "L": "升",
+        "l": "升",
         "t": "顿",
         "V": "伏特",
         "W": "瓦",
@@ -385,7 +386,10 @@ class Unit2ZH(object):
                 try:
                     drep = Unit2ZH.pairs4sure[dem]
                 except KeyError:
-                    drep = dem
+                    try:
+                        drep = Unit2ZH.ambipairs[dem]
+                    except:
+                        drep = dem
 
                 return n23 + nrep + "每" + d23 + drep
 
@@ -400,8 +404,8 @@ class Unit2ZH(object):
         UNIT = {
             "pattern": regex_compile(
                 "(?<=\d)(?P<num>[a-zA-Z]+)(?P<n23>[23])?"
-                "(?P<derived>/(?P<dem>[a-zA-Z]+)(?P<d23>[23])?)?"
-            , [re.IGNORECASE]),
+                "(?P<derived>/(?P<dem>[a-zA-Z]+)(?P<d23>[23])?)?",
+                [re.IGNORECASE]),
             "repl": en_sub,
         }
 
