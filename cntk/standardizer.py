@@ -157,6 +157,10 @@ class Standardizer(BaseProcessor):
         """
         return Offals.digits(repl)
 
+    @safely_sub
+    def order_number(self):
+        return Offals.order_number()
+
     @not_none
     def cut_or_add_punc(self):
         """
