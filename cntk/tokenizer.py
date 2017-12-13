@@ -20,6 +20,9 @@ class Tokenizer(object):
     def set_delimiters(self, delimiters):
         self._sentencedelimiters = delimiters
 
+    def add_delimiters(self, delimiters):
+        self._sentencedelimiters += '|'+delimiters
+
     def set_stopwords(self, stopwords):
         self._stopwords = stopwords
 
@@ -44,7 +47,7 @@ class Tokenizer(object):
         else:
             repl = "\n"
         return [s.strip() for s in re.sub(
-            r"(%s)" % self._sentencedelimiters, repl, txt).split('\n')
+            r"(%s)" % '('+self._sentencedelimiters+')', repl, txt).split('\n')
             if s.strip() != '']
 
     def sentence2words(self):
