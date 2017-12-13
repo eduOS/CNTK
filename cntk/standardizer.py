@@ -158,8 +158,8 @@ class Standardizer(BaseProcessor):
         return Offals.digits(repl)
 
     @safely_sub
-    def order_number(self):
-        return Offals.order_number()
+    def order_number(self, repl=","):
+        return Offals.order_number(repl)
 
     @not_none
     def cut_or_add_punc(self):
