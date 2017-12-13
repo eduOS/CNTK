@@ -185,9 +185,13 @@ def text2charlist(text, utf8=False, keep_word=""):
         text = re.sub(keep_word_escape, "PLACEMENT", text)
     # separate the characters by space
     text = re.sub((offals.NONCHINCHAR), r' \1 ', text)
+    temp = cleanser.set_sentence(text).delete_whitespace().sentence.split()
+    print(temp)
     lst = [[itm] if re.match(offals.NONCHINCHAR, itm) else list(itm)
            for itm in cleanser.set_sentence(text).delete_whitespace().sentence.split()]
+    print(lst)
     text = ' '.join([' '.join(itm) for itm in lst])
+    print(text)
     # delete the blank items
     lst = [char for char in text.split() if char.strip() != ""]
     if flag and not utf8:

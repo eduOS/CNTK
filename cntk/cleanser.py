@@ -46,7 +46,7 @@ class Cleanser(BaseProcessor):
         between English words
         """
         self._sentence = self._sentence.strip()
-        self._sentence = re.sub(regex_compile('(?<!\w)\s(?!\w)'), '', self._sentence)
+        self._sentence = re.sub(regex_compile('(?<!(\w|\.))\s(?!(\w|\.))'), '', self._sentence)
         # print(self._sentence)
         return self
 
