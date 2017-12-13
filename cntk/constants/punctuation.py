@@ -143,7 +143,7 @@ class Punctuation(object):
     # these punctuations may be at the start of a sentence
     # SENTENCE_START = EN_SENTENCE_START + ZH_SENTENCE_START
     SENTENCE_DELIMITERS = (
-        "[\t\n\r！？｡。；\|;~!﹗?…]+|[．.]+( |[^\d])|(?<=[\u4e00-\u9fff])[．.]+|(?<=\d)[．.](?!\d)"
+        "[\t\n\r！？｡。；\|;~!﹗?…]+|[．.]+[^\d]|(?<=[\u4e00-\u9fff])[．.]+|(?<=\d)[．.](?!\d)"
     )
     EN_SENTENCE_DELIMITERS = EN_STOPS + """[]<>|;{}｛｝~\t\n\r"""
     ZH_SENTENCE_DELIMITERS = ZH_STOPS + """；【】\t\n\r"""

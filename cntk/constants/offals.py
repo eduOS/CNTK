@@ -37,7 +37,7 @@ LINK = (
 # source: https://mathiasbynens.be/demo/url-regex
 
 DIGITS = '[0-9]+(\.)?[0-9]*'
-PUNC = regex_compile("(?<= )(\d+)[､、，﹐,、.．](?= )")
+PUNC = regex_compile("(\d+)[､、，﹐,、.．](?=[^\d])")
 CONJUNCTION = (
     # reference: http://baike.baidu.com/item/%E8%BF%9E%E8%AF%8D/505099
 
