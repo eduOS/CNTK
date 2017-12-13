@@ -193,5 +193,5 @@ class Standardizer(BaseProcessor):
             ).math_int().unit_date().math_frac().unit_per(
             ).unit_percent().unit_range().unit_en2zh0().unit_en2zh1(
             ).unit_en2zh2().unit_temp().unit_latnlon().unit_time(
-            ).zero_one().time_zero().math_percent().cut_or_add_punc()
+            ).zero_one().time_zero().math_percent()
         return self
