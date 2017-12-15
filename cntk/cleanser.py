@@ -102,6 +102,26 @@ class Cleanser(BaseProcessor):
     def del_links(self, *args):
         return
 
+    @not_none
+    def unnecessary_quot(self):
+        """
+        unnecessary quotations mean quotations with sentence dilimiters in it
+        """
+        new_sentence = ""
+        if not re.search('"', self._sentence):
+            return self
+        for n, w in enumerate(self._sentence.split('"')):
+            if n % 2 and re.search(Punctuation.SENTENCE_DELIMITERS, w):
+                new_sentence += '"' + w + '"'
+            else:
+                new_sentence += w
+        self._sentence = new_sentence
+        return self
+
+    @safely_del
+    def repeating_delimiters(self):
+        pass
+
     # @not_none
     # def strip_punc(self):
     #     """

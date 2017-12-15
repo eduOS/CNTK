@@ -38,6 +38,7 @@ LINK = (
 
 DIGITS = '[0-9]+(\.)?[0-9]*'
 PUNC = regex_compile("(\d+)[､、，﹐,、.．](?=[^\d])")
+PERIOD_IN_INITIALISM = "[a-zA-Z][][a-zA-Z]"
 CONJUNCTION = (
     # reference: http://baike.baidu.com/item/%E8%BF%9E%E8%AF%8D/505099
 
@@ -86,9 +87,15 @@ class Offals(object):
 
     @staticmethod
     def order_number(repl):
-        NCC = {
+        ON = {
             "pattern": PUNC,
             "repl": "\g<1>"+repl,
         }
 
-        return NCC
+        return ON
+
+    @staticmethod
+    def periods():
+        # TODO: delete the end of the period
+        return "(?<=[a-zA-Z])[" + Punctuation.PERIODS + "](?=[a-zA-Z])"
+        # return "(?(?<=[" + Punctuation.PERIODS + "][a-zA-Z])" + Punctuation.PERIODS + "(?=[a-zA-Z])"

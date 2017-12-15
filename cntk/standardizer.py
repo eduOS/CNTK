@@ -6,9 +6,9 @@ from __future__ import absolute_import
 from __future__ import division
 import unicodedata
 import os
-import re
 
 from cntk.constants.punctuation import Punctuation
+from cntk.utils import safely_del
 from cntk.constants.mathre import Math2ZH
 from cntk.constants.units import Unit2ZH
 from cntk.constants.timere import Time2ZH
@@ -125,6 +125,10 @@ class Standardizer(BaseProcessor):
     def brand_en2zh(self):
         pass
 
+    @safely_del(Offals.periods())
+    def initialism(self):
+        return
+
     @safely_sub
     def unit_en2zh1(self):
         """
@@ -162,22 +166,6 @@ class Standardizer(BaseProcessor):
         return Offals.order_number(repl)
 
     @not_none
-    def cut_or_add_punc(self):
-        """
-        delete " with sentence dilimiters in it
-        """
-        new_sentence = ""
-        if not re.search('"', self._sentence):
-            return self
-        for n, w in enumerate(self._sentence.split('"')):
-            if n % 2 and re.search('[,.;!]', w):
-                new_sentence += '"' + w + '"'
-            else:
-                new_sentence += w
-        self._sentence = new_sentence
-        return self
-
-    @not_none
     def standardize(self, mode="basic"):
         """
         mode can be basic and all
@@ -188,13 +176,13 @@ class Standardizer(BaseProcessor):
         # and change chinese punctuations to english ones
         if mode == "basic":
             self.to_lowercase().zh_punc2en_punc().fwidth2hwidth(
-            ).unit_percent().unit_range().cut_or_add_punc().unit_time()
+            ).unit_percent().unit_range().unit_time()
         elif mode == "all":
             """
             the default sub order
             """
             self.to_lowercase().zh_punc2en_punc().fwidth2hwidth(
-            ).math_int().unit_date().math_frac().unit_per(
+            ).initialism().math_int().unit_date().math_frac().unit_per(
             ).unit_percent().unit_range().unit_en2zh0().unit_en2zh1(
             ).unit_en2zh2().unit_temp().unit_latnlon().unit_time(
             ).zero_one().time_zero().math_percent()
