@@ -97,5 +97,5 @@ class Offals(object):
     @staticmethod
     def periods():
         # TODO: delete the end of the period
-        return "(?<=[a-zA-Z])[" + Punctuation.PERIODS + "](?=[a-zA-Z])"
+        return "((?<=[a-zA-Z])\.(?=[a-zA-Z]\.)|(?<=\.[a-zA-Z])\.)"
         # return "(?(?<=[" + Punctuation.PERIODS + "][a-zA-Z])" + Punctuation.PERIODS + "(?=[a-zA-Z])"
