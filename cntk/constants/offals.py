@@ -71,7 +71,7 @@ CONJUNCTION = (
     # "以|以便|以免|为了"
 )
 
-NONCHINCHAR = regex_compile("((\w|\.)+)")
+NONCHINCHAR = regex_compile("((\w|\.|\d)+)")
 
 
 class Offals(object):
