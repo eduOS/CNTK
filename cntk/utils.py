@@ -8,6 +8,7 @@ from __future__ import division
 import re
 from codecs import open
 from functools import reduce, wraps
+from termcolor import colored
 
 
 def regex_compile(regex, flags=[]):
@@ -28,21 +29,26 @@ def not_none(func):
     """
     @wraps(func)
     def wrapper(self, *args, **kwargs):
-        verbose = kwargs['verbose']
+        try:
+            verbose = kwargs['verbose']
+        except:
+            verbose = False
         if verbose:
             func_name = func.__name__
 
-        if self.is_none():
+        if self.is_none() and verbose:
             if verbose:
-                print("sentence is none before: '%s' in %s" % (self._sentence, func_name))
+                print("Sentence is " + colored("NONE") + " before: '%s' in %s" % (self._sentence, func_name))
             return self
         else:
             if verbose:
-                print("sentence is '%s' before processing," % self._sentence, end=" ")
+                print("Sentence is '%s' before processing," % self._sentence, end=" ")
             try:
+                if 'verbose' in kwargs:
+                    kwargs.pop("verbose")
                 func(self, *args, **kwargs)
                 if verbose:
-                    print("and %s after it in %s" % (self._sentence, func_name))
+                    print("and %s after it in %s function. " % (self._sentence, func_name))
             except TypeError:
                 raise
             return self
@@ -75,12 +81,15 @@ def safely_sub(func):
     """
     @wraps(func)
     def wrapper(self, *args, **kwargs):
-        verbose = kwargs['verbose']
+        try:
+            verbose = kwargs['verbose']
+        except:
+            verbose = False
         if verbose:
             func_name = func.__name__
         if self.is_none():
             if verbose:
-                print("sentence is none before: '%s' in %s" % (self._sentence, func_name))
+                print("Sentence is " + colored("NONE") + " before: '%s' in %s" % (self._sentence, func_name))
             return self
         else:
             if verbose:
@@ -88,7 +97,7 @@ def safely_sub(func):
             self._sentence = re.sub(
                 string=self._sentence, **func(self, *args, **kwargs))
             if verbose:
-                print("and %s after it in %s" % (self._sentence, func_name))
+                print("and %s after it in %s function." % (self._sentence, func_name))
             return self
     return wrapper
 
@@ -97,7 +106,10 @@ def safely_del(offal_regex):
     def real_decorator(function):
         @wraps(function)
         def wrapper(self, *args, **kwargs):
-            verbose = kwargs['verbose']
+            try:
+                verbose = kwargs['verbose']
+            except:
+                verbose = False
             if verbose:
                 func_name = function.__name__
             if verbose:
@@ -108,7 +120,7 @@ def safely_del(offal_regex):
                 self._sentence = re.sub(
                     arg, '', self._sentence)
             if verbose:
-                print("and %s after it in %s" % (self._sentence, func_name))
+                print("and %s after it in %s function." % (self._sentence, func_name))
             return self
         return wrapper
     return real_decorator
@@ -118,18 +130,21 @@ def further_sub(sub_dic):
     def wrappers_wrapper(func):
         @wraps(func)
         def wrapper(self, *args, **kwargs):
-            verbose = kwargs['verbose']
+            try:
+                verbose = kwargs['verbose']
+            except:
+                verbose = False
             if verbose:
                 func_name = func.__name__
             if self.is_none():
                 if verbose:
-                    print("sentence is none before: '%s' in %s" % (self._sentence, func_name))
+                    print("Sentence is " + colored("NONE") + " before: '%s' in %s" % (self._sentence, func_name))
                 return self
             if verbose:
                 print("sentence is '%s' before processing," % self._sentence, end=" ")
             self._sentence = re.sub(string=self._sentence, **sub_dic)
             if verbose:
-                print("and %s after it in %s" % (self._sentence, func_name))
+                print("and %s after it in %s function. " % (self._sentence, func_name))
             return self
 
         return wrapper

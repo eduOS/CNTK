@@ -40,17 +40,17 @@ class Standardizer(BaseProcessor):
         super(Standardizer, self).__init__(sentence)
 
     @not_none
-    def to_lowercase(self, verbose=False):
+    def to_lowercase(self):
         self._sentence = self._sentence.lower()
         return self
 
     @not_none
-    def fwidth2hwidth(self, verbose=False):
+    def fwidth2hwidth(self):
         self._sentence = unicodedata.normalize('NFKC', self._sentence)
         return self
 
     @not_none
-    def zh_punc2en_punc(self, reverse=False, verbose=False):
+    def zh_punc2en_punc(self, reverse=False):
         """
         replace the English punctuations in sentence to Chinese ones
         """
@@ -66,36 +66,36 @@ class Standardizer(BaseProcessor):
         return self
 
     @safely_sub
-    def math_frac(self, verbose=False):
+    def math_frac(self):
         """
         transform the fraction of the form 1/2 to the form like 2分之1
         """
         return Math2ZH.frac()
 
     @safely_sub
-    def math_int(self, verbose=False):
+    def math_int(self):
         """
         delete useless point zeros of ints
         """
         return Math2ZH.myint()
 
     @safely_sub
-    def unit_latnlon(self, verbose=False):
+    def unit_latnlon(self):
         '''
         transform angle to 度， 分， 秒
         '''
         return Unit2ZH.latnlon()
 
     @safely_sub
-    def unit_per(self, verbose=False):
+    def unit_per(self):
         return Unit2ZH.per()
 
     @safely_sub
-    def unit_percent(self, verbose=False):
+    def unit_percent(self):
         return Unit2ZH.percent()
 
     @safely_sub
-    def unit_temp(self, verbose=False):
+    def unit_temp(self):
         """
         temperature
         """
@@ -103,70 +103,70 @@ class Standardizer(BaseProcessor):
 
     @further_sub(Unit2ZH.unit_en2zh3())
     @safely_sub
-    def unit_range(self, verbose=False):
+    def unit_range(self):
         return Unit2ZH.myrange()
 
     @safely_sub
-    def unit_date(self, verbose=False):
+    def unit_date(self):
         return Unit2ZH.date()
 
     @safely_sub
-    def unit_time(self, verbose=False):
+    def unit_time(self):
         return Unit2ZH.time()
 
     @safely_sub
-    def unit_en2zh0(self, verbose=False):
+    def unit_en2zh0(self):
         """
         for units which are between chinese characters
         """
         return Unit2ZH.unit_en2zh0()
 
     @safely_sub
-    def brand_en2zh(self, verbose=False):
+    def brand_en2zh(self):
         pass
 
     @safely_del(Offals.periods())
-    def initialism(self, verbose=False):
+    def initialism(self):
         return
 
     @safely_sub
-    def unit_en2zh1(self, verbose=False):
+    def unit_en2zh1(self):
         """
         for units which are certain
         """
         return Unit2ZH.unit_en2zh1()
 
     @safely_sub
-    def unit_en2zh2(self, verbose=False):
+    def unit_en2zh2(self):
         # units not in range
         return Unit2ZH.unit_en2zh2()
 
     @safely_sub
-    def math_percent(self, verbose=False):
+    def math_percent(self):
         # units not in range
         return Math2ZH.percent()
 
     @safely_sub
-    def time_zero(self, verbose=False):
+    def time_zero(self):
         return Time2ZH.zero()
 
     @safely_sub
-    def zero_one(self, verbose=False):
+    def zero_one(self):
         return Math2ZH.zeroorone()
 
     @safely_sub
-    def digits(self, repl="*", verbose=False):
+    def digits(self, repl="*"):
         """
         replace non (repetitive) chinese characters with repl
         """
         return Offals.digits(repl)
 
     @safely_sub
-    def order_number(self, repl=",", verbose=False):
+    def order_number(self, repl=","):
         return Offals.order_number(repl)
 
     @not_none
-    def standardize(self, mode="basic", verbose=False):
+    def standardize(self, mode="basic"):
         """
         mode can be basic and all
         if all:

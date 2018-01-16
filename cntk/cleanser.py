@@ -38,7 +38,7 @@ class Cleanser(BaseProcessor):
         return self.h.handle(html)
 
     @not_none
-    def delete_whitespace(self, verbose=False):
+    def delete_whitespace(self):
         """
         delete unnecessary white space between chinese but keep those necessary
         between English words
@@ -49,7 +49,7 @@ class Cleanser(BaseProcessor):
         return self
 
     @not_none
-    def delete_offals(self, verbose=False):
+    def delete_offals(self):
         # self._sentence = re.sub(offals.LINK, '', self._sentence)
         # self._sentence = re.sub(offals.BULLET, '', self._sentence)
         # self._sentence = re.sub(offals.ADDITION, '', self._sentence)
@@ -59,11 +59,11 @@ class Cleanser(BaseProcessor):
         return self.del_links(
         ).del_bullet().del_forward().del_addition().del_parenote()
 
-    @safely_del(offals.FORWARD, verbose=False)
+    @safely_del(offals.FORWARD)
     def del_forward(self, *args):
         return
 
-    @safely_del(offals.ADDITION, verbose=False)
+    @safely_del(offals.ADDITION)
     def del_addition(self, *args):
         return
 
@@ -81,7 +81,7 @@ class Cleanser(BaseProcessor):
     #     return self
 
     @not_none
-    def del_all_punc(self, keep="", repl=" ", verbose=False):
+    def del_all_punc(self, keep="", repl=" "):
         # https://stackoverflow.com/a/1324114/3552975
         translate_table = dict((ord(char), repl) for char in Punctuation.ALL_PUNC)
         for p in keep:
@@ -93,7 +93,7 @@ class Cleanser(BaseProcessor):
         return self
 
     @not_none
-    def del_punc(self, puncs, repl=" ", verbose=False):
+    def del_punc(self, puncs, repl=" "):
         """
         replace all punc in puncs with repl
         """
@@ -104,19 +104,19 @@ class Cleanser(BaseProcessor):
         return self
 
     @safely_del(offals.PARENOTE)
-    def del_parenote(self, verbose=False, *args):
+    def del_parenote(self, *args):
         return
 
     @safely_del(offals.BULLET)
-    def del_bullet(self, verbose=False, *args):
+    def del_bullet(self, *args):
         return
 
     @safely_del(offals.LINK)
-    def del_links(self, verbose=False, *args):
+    def del_links(self, *args):
         return
 
     @not_none
-    def unnecessary_quot(self, verbose=False):
+    def unnecessary_quot(self):
         """
         unnecessary quotations mean quotations with sentence dilimiters in it
         """
@@ -132,11 +132,11 @@ class Cleanser(BaseProcessor):
         return self
 
     @safely_del
-    def repeating_delimiters(self, verbose=False):
+    def repeating_delimiters(self):
         pass
 
     @safely_del(Punctuation.USELESS)
-    def delete_useless(self, verbose=False, *args):
+    def delete_useless(self, *args):
         return
 
     # @not_none
