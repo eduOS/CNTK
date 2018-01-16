@@ -36,7 +36,7 @@ LINK = (
 )
 # source: https://mathiasbynens.be/demo/url-regex
 
-DIGITS = '[0-9]+(\.)?[0-9]*'
+DIGITS = '(?<![a-zA-Z])[0-9]+(\.)?[0-9]*'
 PUNC = regex_compile("(\d+)[､、，﹐,、.．](?=[^\d])")
 PERIOD_IN_INITIALISM = "[a-zA-Z][][a-zA-Z]"
 CONJUNCTION = (

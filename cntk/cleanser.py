@@ -15,8 +15,6 @@ import html2text
 
 __all__ = ['Cleanser']
 
-translate_table = dict((ord(char), " ") for char in Punctuation.ALL_PUNC)
-
 
 class Cleanser(BaseProcessor):
     # TODO: a classmethod to initialize this class
@@ -40,7 +38,7 @@ class Cleanser(BaseProcessor):
         return self.h.handle(html)
 
     @not_none
-    def delete_whitespace(self):
+    def delete_whitespace(self, verbose=False):
         """
         delete unnecessary white space between chinese but keep those necessary
         between English words
@@ -51,7 +49,7 @@ class Cleanser(BaseProcessor):
         return self
 
     @not_none
-    def delete_offals(self):
+    def delete_offals(self, verbose=False):
         # self._sentence = re.sub(offals.LINK, '', self._sentence)
         # self._sentence = re.sub(offals.BULLET, '', self._sentence)
         # self._sentence = re.sub(offals.ADDITION, '', self._sentence)
@@ -61,11 +59,11 @@ class Cleanser(BaseProcessor):
         return self.del_links(
         ).del_bullet().del_forward().del_addition().del_parenote()
 
-    @safely_del(offals.FORWARD)
+    @safely_del(offals.FORWARD, verbose=False)
     def del_forward(self, *args):
         return
 
-    @safely_del(offals.ADDITION)
+    @safely_del(offals.ADDITION, verbose=False)
     def del_addition(self, *args):
         return
 
@@ -83,27 +81,42 @@ class Cleanser(BaseProcessor):
     #     return self
 
     @not_none
-    def del_all_punc(self):
+    def del_all_punc(self, keep="", repl=" ", verbose=False):
         # https://stackoverflow.com/a/1324114/3552975
+        translate_table = dict((ord(char), repl) for char in Punctuation.ALL_PUNC)
+        for p in keep:
+            if ord(p) in translate_table:
+                translate_table.pop(ord(p))
         self._sentence = re.sub("\.(?=\d)", "dooooooog", self._sentence)
         self._sentence = self._sentence.translate(translate_table)
         self._sentence = re.sub("dooooooog(?=\d)", ".", self._sentence)
         return self
 
+    @not_none
+    def del_punc(self, puncs, repl=" ", verbose=False):
+        """
+        replace all punc in puncs with repl
+        """
+        self._sentence = re.sub("\.(?=\d)", "dooooooog", self._sentence)
+        translate_table = dict((ord(p), repl) for p in puncs)
+        self._sentence = self._sentence.translate(translate_table)
+        self._sentence = re.sub("dooooooog(?=\d)", ".", self._sentence)
+        return self
+
     @safely_del(offals.PARENOTE)
-    def del_parenote(self, *args):
+    def del_parenote(self, verbose=False, *args):
         return
 
     @safely_del(offals.BULLET)
-    def del_bullet(self, *args):
+    def del_bullet(self, verbose=False, *args):
         return
 
     @safely_del(offals.LINK)
-    def del_links(self, *args):
+    def del_links(self, verbose=False, *args):
         return
 
     @not_none
-    def unnecessary_quot(self):
+    def unnecessary_quot(self, verbose=False):
         """
         unnecessary quotations mean quotations with sentence dilimiters in it
         """
@@ -119,8 +132,12 @@ class Cleanser(BaseProcessor):
         return self
 
     @safely_del
-    def repeating_delimiters(self):
+    def repeating_delimiters(self, verbose=False):
         pass
+
+    @safely_del(Punctuation.USELESS)
+    def delete_useless(self, verbose=False, *args):
+        return
 
     # @not_none
     # def strip_punc(self):

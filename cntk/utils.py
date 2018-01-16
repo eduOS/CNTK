@@ -19,6 +19,7 @@ def regex_compile(regex, flags=[]):
         r = re.compile(regex, reduce(lambda i,j: i|j, flags, 0))
     return r
 
+
 def not_none(func):
     """
     decorator to make sure the sentence to be processed is not none
@@ -27,16 +28,21 @@ def not_none(func):
     """
     @wraps(func)
     def wrapper(self, *args, **kwargs):
+        verbose = kwargs['verbose']
+        if verbose:
+            func_name = func.__name__
+
         if self.is_none():
-            # print("sentence is none before: "+unicode(self._sentence))
+            if verbose:
+                print("sentence is none before: '%s' in %s" % (self._sentence, func_name))
             return self
         else:
-            # import time
-            # print("sentence in not none: "+unicode(self._sentence))
-            # print(func.__name__)
-            # time.sleep(5)
+            if verbose:
+                print("sentence is '%s' before processing," % self._sentence, end=" ")
             try:
                 func(self, *args, **kwargs)
+                if verbose:
+                    print("and %s after it in %s" % (self._sentence, func_name))
             except TypeError:
                 raise
             return self
@@ -69,11 +75,20 @@ def safely_sub(func):
     """
     @wraps(func)
     def wrapper(self, *args, **kwargs):
+        verbose = kwargs['verbose']
+        if verbose:
+            func_name = func.__name__
         if self.is_none():
+            if verbose:
+                print("sentence is none before: '%s' in %s" % (self._sentence, func_name))
             return self
         else:
+            if verbose:
+                print("sentence is '%s' before processing," % self._sentence, end=" ")
             self._sentence = re.sub(
                 string=self._sentence, **func(self, *args, **kwargs))
+            if verbose:
+                print("and %s after it in %s" % (self._sentence, func_name))
             return self
     return wrapper
 
@@ -82,11 +97,18 @@ def safely_del(offal_regex):
     def real_decorator(function):
         @wraps(function)
         def wrapper(self, *args, **kwargs):
+            verbose = kwargs['verbose']
+            if verbose:
+                func_name = function.__name__
+            if verbose:
+                print("sentence is '%s' before processing," % self._sentence, end=" ")
             self._sentence = re.sub(
                 offal_regex, '', self._sentence)
             for arg in args:
                 self._sentence = re.sub(
                     arg, '', self._sentence)
+            if verbose:
+                print("and %s after it in %s" % (self._sentence, func_name))
             return self
         return wrapper
     return real_decorator
@@ -96,9 +118,18 @@ def further_sub(sub_dic):
     def wrappers_wrapper(func):
         @wraps(func)
         def wrapper(self, *args, **kwargs):
+            verbose = kwargs['verbose']
+            if verbose:
+                func_name = func.__name__
             if self.is_none():
+                if verbose:
+                    print("sentence is none before: '%s' in %s" % (self._sentence, func_name))
                 return self
+            if verbose:
+                print("sentence is '%s' before processing," % self._sentence, end=" ")
             self._sentence = re.sub(string=self._sentence, **sub_dic)
+            if verbose:
+                print("and %s after it in %s" % (self._sentence, func_name))
             return self
 
         return wrapper
