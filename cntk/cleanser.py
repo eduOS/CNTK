@@ -7,6 +7,7 @@ from __future__ import division
 import re
 
 from cntk.constants import offals
+from termcolor import colored
 from cntk.utils import not_none, BaseProcessor
 from cntk.constants.punctuation import Punctuation
 from cntk.utils import safely_del
@@ -67,27 +68,21 @@ class Cleanser(BaseProcessor):
     def del_addition(self, *args):
         return
 
-    # TODO
-    # @not_none
-    # @staticmethod
-    # def del_all_punc(self, sentence=0):
-    #     # https://stackoverflow.com/a/1324114/3552975
-    #     if sentence == 0:
-    #         self._sentence = self._sentence.translate(translate_talbe)
-    #     else:
-    #         sentence = sentence.translate(translate_talbe)
-    #         return sentence
-
-    #     return self
-
     @not_none
-    def del_all_punc(self, keep="", repl=" "):
+    def del_all_punc(self, except_=u"", repl=u" "):
+        # something wrong here
+        # u"；()、" in the except will be deleted alwasy"
         # https://stackoverflow.com/a/1324114/3552975
-        translate_table = dict((ord(char), repl) for char in Punctuation.ALL_PUNC)
-        for p in keep:
-            if ord(p) in translate_table:
-                translate_table.pop(ord(p))
-        self._sentence = re.sub("\.(?=\d)", "dooooooog", self._sentence)
+        all_punc = unicode(Punctuation.ALL_PUNC) # NOQA
+        repl = unicode(repl) # NOQA
+        if not repl:
+            repl = None
+        all_punc = set(all_punc) - set(except_)
+        if " " in all_punc:
+            print(colored(
+                "Warning: space will be deleted(in del_all_punc func).. if this is unexpected delete the space from punc", 'red'))
+        self._sentence = re.sub(r"\.(?=\d)", "dooooooog", self._sentence)
+        translate_table = dict((ord(char), repl) for char in all_punc)
         self._sentence = self._sentence.translate(translate_table)
         self._sentence = re.sub("dooooooog(?=\d)", ".", self._sentence)
         return self
@@ -99,6 +94,9 @@ class Cleanser(BaseProcessor):
         """
         self._sentence = re.sub("\.(?=\d)", "dooooooog", self._sentence)
         translate_table = dict((ord(p), repl) for p in puncs)
+        if "" in translate_table:
+            print(colored(
+                "Warning: space will be deleted(in del_punc func).. if this is unexpected delete the space from punc", 'red'))
         self._sentence = self._sentence.translate(translate_table)
         self._sentence = re.sub("dooooooog(?=\d)", ".", self._sentence)
         return self

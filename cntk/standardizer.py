@@ -46,6 +46,9 @@ class Standardizer(BaseProcessor):
 
     @not_none
     def fwidth2hwidth(self):
+        """
+        warming: this may cause punc or chars loss
+        """
         self._sentence = unicodedata.normalize('NFKC', self._sentence)
         return self
 

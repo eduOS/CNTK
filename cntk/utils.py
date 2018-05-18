@@ -42,13 +42,13 @@ def not_none(func):
             return self
         else:
             if verbose:
-                print("Sentence is '%s' before processing," % self._sentence, end=" ")
+                print("Before:\t '%s' ," % self._sentence)
             try:
                 if 'verbose' in kwargs:
                     kwargs.pop("verbose")
                 func(self, *args, **kwargs)
                 if verbose:
-                    print("and %s after it in %s function. " % (self._sentence, func_name))
+                    print("After:\t'" + colored("%s" % self._sentence, 'red') + "' \nin %s function. \n" % func_name)
             except TypeError:
                 raise
             return self
@@ -93,11 +93,11 @@ def safely_sub(func):
             return self
         else:
             if verbose:
-                print("sentence is '%s' before processing," % self._sentence, end=" ")
+                print("Before:\t '%s' ," % self._sentence)
             self._sentence = re.sub(
                 string=self._sentence, **func(self, *args, **kwargs))
             if verbose:
-                print("and %s after it in %s function." % (self._sentence, func_name))
+                print("After:\t'" + colored("%s" % self._sentence, 'red') + "' \nin %s function. \n" % func_name)
             return self
     return wrapper
 
@@ -113,14 +113,14 @@ def safely_del(offal_regex):
             if verbose:
                 func_name = function.__name__
             if verbose:
-                print("sentence is '%s' before processing," % self._sentence, end=" ")
+                print("Before:\t '%s' ," % self._sentence)
             self._sentence = re.sub(
                 offal_regex, '', self._sentence)
             for arg in args:
                 self._sentence = re.sub(
                     arg, '', self._sentence)
             if verbose:
-                print("and %s after it in %s function." % (self._sentence, func_name))
+                print("After:\t'" + colored("%s" % self._sentence, 'red') + "' \nin %s function. \n" % func_name)
             return self
         return wrapper
     return real_decorator
@@ -141,10 +141,10 @@ def further_sub(sub_dic):
                     print("Sentence is " + colored("NONE") + " before: '%s' in %s" % (self._sentence, func_name))
                 return self
             if verbose:
-                print("sentence is '%s' before processing," % self._sentence, end=" ")
+                print("Before:\t '%s' ," % self._sentence)
             self._sentence = re.sub(string=self._sentence, **sub_dic)
             if verbose:
-                print("and %s after it in %s function. " % (self._sentence, func_name))
+                print("After:\t'" + colored("%s" % self._sentence, 'red') + "' \nin %s function. \n" % func_name)
             return self
 
         return wrapper
