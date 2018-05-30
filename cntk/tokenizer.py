@@ -3,7 +3,6 @@
 
 from __future__ import unicode_literals, print_function
 from . import constants
-import jieba
 import jieba.posseg as posseg
 import re
 from cntk.cleanser import Cleanser
@@ -126,7 +125,8 @@ class JiebaTokenizer(Tokenizer):
         elif pos is True:
             words = posseg.cut(sentence)
         elif pos is None:
-            words = [word for word in jieba.cut(sentence) if word.strip()]
+            # it's said, posseg is more accurate
+            words = [word.word for word in posseg.cut(sentence) if word.word.strip()]
 
         if not stopwords:
             words = self.delete_stopwords(words)
