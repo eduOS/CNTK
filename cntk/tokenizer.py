@@ -120,13 +120,13 @@ class JiebaTokenizer(Tokenizer):
         if not sentence:
             return None
         if isinstance(pos, list):
-            words = posseg.cut(sentence)
+            words = posseg.cut(sentence, HMM=False)
             words = [w for w in words if w.flag in pos and w.word.strip()]
         elif pos is True:
-            words = posseg.cut(sentence)
+            words = posseg.cut(sentence, HMM=False)
         elif pos is None:
             # it's said, posseg is more accurate
-            words = [word.word for word in posseg.cut(sentence) if word.word.strip()]
+            words = [word.word for word in posseg.cut(sentence, HMM=False) if word.word.strip()]
 
         if not stopwords:
             words = self.delete_stopwords(words)
