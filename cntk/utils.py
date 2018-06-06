@@ -211,6 +211,9 @@ class BaseProcessor(object):
     def __init__(self, sentence):
         self._sentence = sentence
 
+    def __str__(self):
+        return self._sentence
+
     def set_sentence(self, sentence):
         self._sentence = sentence
         return self
