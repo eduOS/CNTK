@@ -187,7 +187,7 @@ def text2charlist(text, utf8=False, keep_word=""):
     if keep_word:
         text = re.sub(keep_word_escape, "PLACEMENT", text)
     # separate the characters by space
-    text = re.sub(('\.{2,}'), r' \1 ', text)
+    text = re.sub('(\.{2,})', r' \1 ', text)
     text = re.sub((offals.NONCHINCHAR), r' \1 ', text)
     lst = [[itm] if re.match(offals.NONCHINCHAR, itm) else list(itm)
            for itm in cleanser.set_sentence(text).delete_whitespace().sentence.split()]
