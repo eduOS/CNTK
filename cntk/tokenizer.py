@@ -88,7 +88,7 @@ class Tokenizer(object):
             the corpus is the corpus corresponding to the sentences
             because the sentence may be empty
         """
-        # TODO: filter out sentence function
+        # TODO: filter out sentence function, sentence with particular features should be dropped
         instance = cls()
         corpus = []
         for sentence in sentences:
