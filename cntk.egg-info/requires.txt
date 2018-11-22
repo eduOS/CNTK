@@ -1,0 +1,4 @@
+jieba
+opencc
+html2text
+termcolor
