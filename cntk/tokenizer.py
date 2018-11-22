@@ -7,8 +7,9 @@ import jieba.posseg as posseg
 import re
 from cntk.cleanser import Cleanser
 from cntk.constants import offals
+from pyhanlp import HanLP
 
-__all__ = ['JiebaTokenizer']
+__all__ = ['Tokenizer', 'JiebaTokenizer']
 
 
 class Tokenizer(object):
@@ -36,17 +37,20 @@ class Tokenizer(object):
     def text2para(self):
         pass
 
-    def text2sentences(self, txt, punc=True):
+    @classmethod
+    def text2sentences(cls, txt, punc=True):
         """
         cut a text into sentences using regex
         if punc is True then the ending punctuation will be kept
         """
+        # TODO: train model to do it
+        instance = cls()
         if punc:
             repl = r"\1\n"
         else:
             repl = "\n"
         return [s.strip() for s in re.sub(
-            r"(%s)" % '('+self._sentencedelimiters+')', repl, txt).split('\n')
+            r"(%s)" % '('+instance._sentencedelimiters+')', repl, txt).split('\n')
             if s.strip() != '']
 
     def sentence2words(self):
@@ -55,7 +59,8 @@ class Tokenizer(object):
         """
         raise NotImplementedError("Abstract method")
 
-    def text2words(self, text, dim=2, pos=None, punc=False):
+    @classmethod
+    def text2words(cls, text, dim=2, pos=None, punc=False):
         """
         input:
             a text
@@ -64,26 +69,34 @@ class Tokenizer(object):
             if dim is 1 return a one dimentional one
         """
         corpus = []
-        sentences = self.text2sentences(text)
+        sentences = cls.text2sentences(text)
         for sentence in sentences:
-            corpus.append(self.sentence2words(sentence, pos=pos, punc=punc))
+            corpus.append(cls().sentence2words(sentence, pos=pos, punc=punc))
         return corpus
 
+    @classmethod
     def sentences2words(
-        self,
+        cls,
         sentences,
         stopwords=True,
         pos=None,
         punc=False
     ):
-        """return the sentences and corresponding corpus"""
+        """
+        return the sentences and corresponding corpus
+            the sentence is the filtered sentences
+            the corpus is the corpus corresponding to the sentences
+            because the sentence may be empty
+        """
+        # TODO: filter out sentence function
+        instance = cls()
         corpus = []
         for sentence in sentences:
-            corpus.append(self.sentence2words(sentence, stopwords, pos, punc))
+            corpus.append(instance.sentence2words(sentence, stopwords, pos, punc))
         sentences = [
-            sentences[i] for i in range(len(corpus)) if corpus[i] != []]
+            sentences[i] for i in range(len(corpus)) if corpus[i]]
         corpus = [
-            corpus[i] for i in range(len(corpus)) if corpus[i] != []]
+            corpus[i] for i in range(len(corpus)) if corpus[i]]
         assert len(sentences) == len(
             corpus), "sentence and corpus length not equal"
         return sentences, corpus
@@ -127,6 +140,57 @@ class JiebaTokenizer(Tokenizer):
         elif pos is None:
             # it's said, posseg is more accurate
             words = [word.word for word in posseg.cut(sentence) if word.word.strip()]
+
+        if not stopwords:
+            words = self.delete_stopwords(words)
+        if not punc:
+            try:
+                words = [word for word in words if
+                         word.word not in constants.punc]
+            except AttributeError:
+                words = [word for word in words if
+                         word not in constants.punc]
+        return words
+
+
+class HanLPTokenizer(Tokenizer):
+    # TODO: install on demand: don't install all third models but install it when the related class is used
+    def __init__(self):
+        super(JiebaTokenizer, self).__init__()
+
+    def sentence2words(
+        self,
+        sentence,
+        stopwords=True,
+        pos=None,
+        punc=True,
+        chunk=False,
+    ):
+        """
+        all possible pos tags for pos arg:
+            ['an', 'i', 'j', 'l', 'n', 'nr', 'nrfg', 'ns',
+             'nt', 'nz', 't', 'v', 'vd', 'vn', 'eng']
+        inputs:
+            sentence: the sentence which should be cut
+            pos: part of speech, only listed POS will be returned
+            include_stopwords: if is false all stopwords will be ignored and not
+            returned
+        return:
+            a list of words returned
+        """
+        raise Exception("Not implemented yet.")
+        return None
+
+        if not sentence:
+            return None
+        result = HanLP.segment(sentence)
+        if isinstance(pos, list):
+            words = [w for w in result if w.nature.name in pos and w.word.strip()]
+        elif pos is True:
+            words = [w for w in result if w.word.strip()]
+        elif pos is None:
+            # it's said, posseg is more accurate
+            words = [w.word for w in result if w.word.strip()]
 
         if not stopwords:
             words = self.delete_stopwords(words)

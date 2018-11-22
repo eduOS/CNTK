@@ -5,6 +5,7 @@ from __future__ import unicode_literals, print_function
 from __future__ import absolute_import
 from __future__ import division
 import re
+import string
 
 from cntk.constants import offals
 from termcolor import colored
@@ -47,6 +48,19 @@ class Cleanser(BaseProcessor):
         self._sentence = self._sentence.strip()
         self._sentence = re.sub(regex_compile('(?<!(\w|\.))\s(?!(\w|\.))'), '', self._sentence)
         # print(self._sentence)
+        return self
+
+    @not_none
+    def delete_nonprintable(self):
+        """
+        delete non printable characters 
+        only for python3
+        """
+        # TODO: make this as classmethod
+        # Get the difference of all ASCII characters from the set of printable characters
+        nonprintable = set([chr(i) for i in range(128)]).difference(string.printable)
+        # Use translate to remove all non-printable characters
+        self._sentence =  self._sentence.translate({ord(character):None for character in nonprintable})
         return self
 
     @not_none
