@@ -18,3 +18,5 @@ An example:
 >>> print " ".join(t2c("十九大精神进[UNK]万家｜活跃在 牧区 [UNK] 的“马背宣讲队", keep_word="[UNK]"))
 十 九 大 精 神 进 [UNK] 万 家 ｜ 活 跃 在 牧 区 [UNK] 的 “ 马 背 宣 讲 队
 ```
+
+I am too busy to maintain it now. Feel free to flesh this out to your own. 
